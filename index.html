@@ -91,7 +91,7 @@
             transition: all 0.3s;
         }
 
-        .contato-card.dono {
+        .contato-card.proprietario {
             background: #fff9c4;
             border-color: #ffd54f;
         }
@@ -260,7 +260,7 @@
             border: 2px solid;
         }
 
-        .legenda-color.dono {
+        .legenda-color.proprietario {
             background: #fff9c4;
             border-color: #ffd54f;
         }
@@ -383,8 +383,8 @@
             <h3>🎨 Tipos de Contato:</h3>
             <div class="legenda-items">
                 <div class="legenda-item">
-                    <div class="legenda-color dono"></div>
-                    <strong>Dono</strong>
+                    <div class="legenda-color Proprietário"></div>
+                    <strong>Proprietario</strong>
                 </div>
                 <div class="legenda-item">
                     <div class="legenda-color ponto-focal"></div>
@@ -411,7 +411,7 @@
 
         function getClasseTipo(tipo) {
             const classes = {
-                'Dono': 'dono',
+                'Proprietário': 'Proprietário',
                 'Ponto Focal': 'ponto-focal',
                 'N1': 'n1',
                 'Fiscal': 'fiscal',
@@ -425,7 +425,7 @@
             const container = document.getElementById('contatos-container');
             
             const contatoHTML = `
-                <div class="section contato-card dono" id="contato-${contatoCount}" data-tipo="Dono">
+                <div class="section contato-card Proprietario" id="contato-${contatoCount}" data-tipo="Proprietario">
                     <div class="contato-header">
                         <h3>👤 Contato #${contatoCount}</h3>
                         ${contatoCount > 1 ? `<button class="btn-remove" onclick="removerContato(${contatoCount})">🗑️ Remover</button>` : ''}
@@ -435,7 +435,7 @@
                         <div class="form-group">
                             <label>Tipo de Contato <span class="required">*</span></label>
                             <select class="tipo-select" onchange="atualizarCorCard(${contatoCount}, this.value)" required>
-                                <option value="Dono">Dono</option>
+                                <option value="Proprietario">Proprietario</option>
                                 <option value="Ponto Focal">Ponto Focal</option>
                                 <option value="N1">N1</option>
                                 <option value="Fiscal">Fiscal</option>
