@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Cadastro de Contatos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fce4ec 0%, #e3f2fd 50%, #f3e5f5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 40px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .section {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #e91e63;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .contato-card {
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .contato-card.dono {
+            background: #fff9c4;
+            border-color: #ffd54f;
+        }
+
+        .contato-card.ponto-focal {
+            background: #e3f2fd;
+            border-color: #64b5f6;
+        }
+
+        .contato-card.n1 {
+            background: #e8f5e9;
+            border-color: #81c784;
+        }
+
+        .contato-card.fiscal {
+            background: #ffe0b2;
+            border-color: #ffb74d;
+        }
+
+        .contato-card.outro {
+            background: #f3e5f5;
+            border-color: #ba68c8;
+        }
+
+        .contato-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .contato-header h3 {
+            color: #333;
+            font-size: 1.3em;
+        }
+
+        .btn-remove {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .btn-remove:hover {
+            background: #d32f2f;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #e91e63 0%, #d81b60 100%);
+            color: white;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            color: white;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #c8e6c9;
+            color: #2e7d32;
+            border: 2px solid #4caf50;
+        }
+
+        .alert-info {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 2px solid #2196F3;
+        }
+
+        .legenda {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .legenda h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .legenda-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .legenda-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legenda-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            border: 2px solid;
+        }
+
+        .legenda-color.dono {
+            background: #fff9c4;
+            border-color: #ffd54f;
+        }
+
+        .legenda-color.ponto-focal {
+            background: #e3f2fd;
+            border-color: #64b5f6;
+        }
+
+        .legenda-color.n1 {
+            background: #e8f5e9;
+            border-color: #81c784;
+        }
+
+        .legenda-color.fiscal {
+            background: #ffe0b2;
+            border-color: #ffb74d;
+        }
+
+        .legenda-color.outro {
+            background: #f3e5f5;
+            border-color: #ba68c8;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .row {
+                grid-template-columns: 1fr;
+            }
+
+            .legenda-items {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .instrucoes {
+            background: #e3f2fd;
+            border: 2px solid #2196F3;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .instrucoes h3 {
+            color: #1565c0;
+            margin-bottom: 15px;
+        }
+
+        .instrucoes ul {
+            list-style: none;
+            color: #1976D2;
+        }
+
+        .instrucoes li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .instrucoes li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .required {
+            color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏢 Formulário de Cadastro de Contatos</h1>
+            <p>Preencha as informações dos contatos da sua empresa</p>
+        </div>
+
+        <!-- Nome da Empresa -->
+        <div class="section">
+            <div class="form-group">
+                <label>🏢 Nome da Empresa <span class="required">*</span></label>
+                <input type="text" id="nomeCliente" placeholder="Ex: Empresa ABC Ltda" required>
+            </div>
+        </div>
+
+        <!-- Contatos -->
+        <div id="contatos-container"></div>
+
+        <!-- Botão Adicionar Contato -->
+        <button class="btn btn-secondary" onclick="adicionarContato()">
+            ➕ Adicionar Mais um Contato
+        </button>
+
+        <!-- Botão Enviar -->
+        <button class="btn btn-success" onclick="enviarFormulario()">
+            📤 Enviar Informações
+        </button>
+
+        <!-- Instruções -->
+        <div class="instrucoes">
+            <h3>💡 Como Preencher:</h3>
+            <ul>
+                <li>Preencha o nome da sua empresa no campo acima</li>
+                <li>Adicione as informações de cada contato importante</li>
+                <li>Você pode adicionar quantos contatos precisar</li>
+                <li>Selecione o tipo de contato que melhor descreve cada pessoa</li>
+                <li>Campos marcados com <span class="required">*</span> são obrigatórios</li>
+                <li>Ao finalizar, clique em "Enviar Informações"</li>
+            </ul>
+        </div>
+
+        <!-- Legenda -->
+        <div class="legenda">
+            <h3>🎨 Tipos de Contato:</h3>
+            <div class="legenda-items">
+                <div class="legenda-item">
+                    <div class="legenda-color dono"></div>
+                    <strong>Dono</strong>
+                </div>
+                <div class="legenda-item">
+                    <div class="legenda-color ponto-focal"></div>
+                    <strong>Ponto Focal</strong>
+                </div>
+                <div class="legenda-item">
+                    <div class="legenda-color n1"></div>
+                    <strong>N1</strong>
+                </div>
+                <div class="legenda-item">
+                    <div class="legenda-color fiscal"></div>
+                    <strong>Fiscal</strong>
+                </div>
+                <div class="legenda-item">
+                    <div class="legenda-color outro"></div>
+                    <strong>Outro</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let contatoCount = 0;
+
+        function getClasseTipo(tipo) {
+            const classes = {
+                'Dono': 'dono',
+                'Ponto Focal': 'ponto-focal',
+                'N1': 'n1',
+                'Fiscal': 'fiscal',
+                'Outro': 'outro'
+            };
+            return classes[tipo] || '';
+        }
+
+        function adicionarContato() {
+            contatoCount++;
+            const container = document.getElementById('contatos-container');
+            
+            const contatoHTML = `
+                <div class="section contato-card dono" id="contato-${contatoCount}" data-tipo="Dono">
+                    <div class="contato-header">
+                        <h3>👤 Contato #${contatoCount}</h3>
+                        ${contatoCount > 1 ? `<button class="btn-remove" onclick="removerContato(${contatoCount})">🗑️ Remover</button>` : ''}
+                    </div>
+                    
+                    <div class="row">
+                        <div class="form-group">
+                            <label>Tipo de Contato <span class="required">*</span></label>
+                            <select class="tipo-select" onchange="atualizarCorCard(${contatoCount}, this.value)" required>
+                                <option value="Dono">Dono</option>
+                                <option value="Ponto Focal">Ponto Focal</option>
+                                <option value="N1">N1</option>
+                                <option value="Fiscal">Fiscal</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Nome Completo <span class="required">*</span></label>
+                            <input type="text" placeholder="Ex: João Silva" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Email <span class="required">*</span></label>
+                            <input type="email" placeholder="Ex: joao.silva@empresa.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Telefone <span class="required">*</span></label>
+                            <input type="tel" placeholder="Ex: (11) 98765-4321" required>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Cargo/Posição na Empresa <span class="required">*</span></label>
+                            <input type="text" placeholder="Ex: Gerente de Projetos, CEO, Analista Financeiro" required>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label>Observações</label>
+                            <textarea placeholder="Informações adicionais sobre este contato..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', contatoHTML);
+        }
+
+        function removerContato(id) {
+            const elemento = document.getElementById(`contato-${id}`);
+            if (elemento) {
+                elemento.remove();
+            }
+        }
+
+        function atualizarCorCard(id, tipo) {
+            const card = document.getElementById(`contato-${id}`);
+            if (card) {
+                card.className = `section contato-card ${getClasseTipo(tipo)}`;
+                card.dataset.tipo = tipo;
+            }
+        }
+
+        function coletarDados() {
+            const nomeCliente = document.getElementById('nomeCliente').value.trim();
+            
+            if (!nomeCliente) {
+                alert('⚠️ Por favor, preencha o nome da empresa!');
+                return null;
+            }
+
+            const contatos = [];
+            const cards = document.querySelectorAll('.contato-card');
+            
+            for (let card of cards) {
+                const inputs = card.querySelectorAll('input, select, textarea');
+                const tipo = inputs[0].value;
+                const nome = inputs[1].value.trim();
+                const email = inputs[2].value.trim();
+                const telefone = inputs[3].value.trim();
+                const cargo = inputs[4].value.trim();
+                const observacoes = inputs[5].value.trim();
+                
+                if (!nome || !email || !telefone || !cargo) {
+                    alert('⚠️ Por favor, preencha todos os campos obrigatórios (*) em todos os contatos!');
+                    return null;
+                }
+                
+                contatos.push({
+                    tipo, nome, email, telefone, cargo, observacoes
+                });
+            }
+            
+            return { nomeCliente, contatos };
+        }
+
+        function enviarFormulario() {
+            const dados = coletarDados();
+            
+            if (!dados) return;
+            
+            // Criar CSV
+            let csv = 'Nome do Cliente,Tipo de Contato,Nome Completo,Email,Telefone,Cargo/Posição,Observações\n';
+            
+            dados.contatos.forEach(contato => {
+                const linha = [
+                    dados.nomeCliente,
+                    contato.tipo,
+                    contato.nome,
+                    contato.email,
+                    contato.telefone,
+                    contato.cargo,
+                    contato.observacoes
+                ].map(campo => `"${campo}"`).join(',');
+                csv += linha + '\n';
+            });
+            
+            // Download do arquivo
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.href = url;
+            link.download = `contatos_${dados.nomeCliente.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+            URL.revokeObjectURL(url);
+            
+            // Mostrar mensagem de sucesso
+            const container = document.querySelector('.container');
+            const alertHTML = `
+                <div class="alert alert-success">
+                    ✅ <strong>Informações enviadas com sucesso!</strong><br>
+                    O arquivo CSV foi baixado automaticamente. Envie este arquivo por email ou compartilhe conforme necessário.
+                </div>
+            `;
+            container.insertAdjacentHTML('afterbegin', alertHTML);
+            
+            // Scroll para o topo
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Adicionar primeiro contato automaticamente
+        adicionarContato();
+    </script>
+</body>
+</html>
