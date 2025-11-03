@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulário de Cadastro de Contatos</title>
+    <title>Formulário de Estrutura Organizacional</title>
     <style>
         * {
             margin: 0;
@@ -91,9 +91,14 @@
             transition: all 0.3s;
         }
 
-        .contato-card.proprietario {
+        .contato-card.diretor {
             background: #fff9c4;
             border-color: #ffd54f;
+        }
+
+        .contato-card.gestao {
+            background: #fce4ec;
+            border-color: #f48fb1;
         }
 
         .contato-card.ponto-focal {
@@ -260,9 +265,14 @@
             border: 2px solid;
         }
 
-        .legenda-color.proprietario {
+        .legenda-color.diretor {
             background: #fff9c4;
             border-color: #ffd54f;
+        }
+
+        .legenda-color.gestao {
+            background: #fce4ec;
+            border-color: #f48fb1;
         }
 
         .legenda-color.ponto-focal {
@@ -340,8 +350,8 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🏢 Formulário de Cadastro de Contatos</h1>
-            <p>Preencha as informações dos contatos da sua empresa</p>
+            <h1>🏢 Estrutura Organizacional da Empresa</h1>
+            <p>Preencha as informações dos principais contatos e a hierarquia da sua empresa</p>
         </div>
 
         <!-- Nome da Empresa -->
@@ -362,7 +372,7 @@
 
         <!-- Botão Enviar -->
         <button class="btn btn-success" onclick="enviarFormulario()">
-            📤 Enviar Informações
+            📤 Gerar Estrutura Organizacional
         </button>
 
         <!-- Instruções -->
@@ -370,21 +380,26 @@
             <h3>💡 Como Preencher:</h3>
             <ul>
                 <li>Preencha o nome da sua empresa no campo acima</li>
-                <li>Adicione as informações de cada contato importante</li>
+                <li>Adicione as informações de cada pessoa da estrutura organizacional</li>
+                <li>Comece pelos Diretores, depois Gestão, e assim por diante</li>
                 <li>Você pode adicionar quantos contatos precisar</li>
-                <li>Selecione o tipo de contato que melhor descreve cada pessoa</li>
+                <li>Selecione o nível hierárquico que melhor descreve cada pessoa</li>
                 <li>Campos marcados com <span class="required">*</span> são obrigatórios</li>
-                <li>Ao finalizar, clique em "Enviar Informações"</li>
+                <li>Ao finalizar, clique em "Gerar Estrutura Organizacional"</li>
             </ul>
         </div>
 
         <!-- Legenda -->
         <div class="legenda">
-            <h3>🎨 Tipos de Contato:</h3>
+            <h3>🎨 Níveis Hierárquicos:</h3>
             <div class="legenda-items">
                 <div class="legenda-item">
-                    <div class="legenda-color Proprietário"></div>
-                    <strong>Proprietario</strong>
+                    <div class="legenda-color diretor"></div>
+                    <strong>Diretor</strong>
+                </div>
+                <div class="legenda-item">
+                    <div class="legenda-color gestao"></div>
+                    <strong>Gestão</strong>
                 </div>
                 <div class="legenda-item">
                     <div class="legenda-color ponto-focal"></div>
@@ -411,7 +426,8 @@
 
         function getClasseTipo(tipo) {
             const classes = {
-                'Proprietário': 'Proprietário',
+                'Diretor': 'diretor',
+                'Gestão': 'gestao',
                 'Ponto Focal': 'ponto-focal',
                 'N1': 'n1',
                 'Fiscal': 'fiscal',
@@ -425,7 +441,7 @@
             const container = document.getElementById('contatos-container');
             
             const contatoHTML = `
-                <div class="section contato-card Proprietario" id="contato-${contatoCount}" data-tipo="Proprietario">
+                <div class="section contato-card diretor" id="contato-${contatoCount}" data-tipo="Diretor">
                     <div class="contato-header">
                         <h3>👤 Contato #${contatoCount}</h3>
                         ${contatoCount > 1 ? `<button class="btn-remove" onclick="removerContato(${contatoCount})">🗑️ Remover</button>` : ''}
@@ -433,9 +449,10 @@
                     
                     <div class="row">
                         <div class="form-group">
-                            <label>Tipo de Contato <span class="required">*</span></label>
+                            <label>Nível Hierárquico <span class="required">*</span></label>
                             <select class="tipo-select" onchange="atualizarCorCard(${contatoCount}, this.value)" required>
-                                <option value="Proprietario">Proprietario</option>
+                                <option value="Diretor">Diretor</option>
+                                <option value="Gestão">Gestão</option>
                                 <option value="Ponto Focal">Ponto Focal</option>
                                 <option value="N1">N1</option>
                                 <option value="Fiscal">Fiscal</option>
@@ -500,6 +517,11 @@
             const contatos = [];
             const cards = document.querySelectorAll('.contato-card');
             
+            if (cards.length === 0) {
+                alert('⚠️ Adicione pelo menos um contato!');
+                return null;
+            }
+            
             for (let card of cards) {
                 const inputs = card.querySelectorAll('input, select, textarea');
                 const tipo = inputs[0].value;
@@ -527,8 +549,8 @@
             
             if (!dados) return;
             
-            // Criar CSV
-            let csv = 'Nome do Cliente,Tipo de Contato,Nome Completo,Email,Telefone,Cargo/Posição,Observações\n';
+            // Criar CSV com BOM UTF-8
+            let csv = 'Nome da Empresa,Nível Hierárquico,Nome Completo,Email,Telefone,Cargo/Posição,Observações\n';
             
             dados.contatos.forEach(contato => {
                 const linha = [
@@ -539,7 +561,7 @@
                     contato.telefone,
                     contato.cargo,
                     contato.observacoes
-                ].map(campo => `"${campo}"`).join(',');
+                ].map(campo => `"${campo.replace(/"/g, '""')}"`).join(',');
                 csv += linha + '\n';
             });
             
@@ -548,16 +570,22 @@
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
             link.href = url;
-            link.download = `contatos_${dados.nomeCliente.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.csv`;
+            link.download = `estrutura_organizacional_${dados.nomeCliente.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.csv`;
             link.click();
             URL.revokeObjectURL(url);
             
             // Mostrar mensagem de sucesso
+            const alertaExistente = document.querySelector('.alert-success');
+            if (alertaExistente) {
+                alertaExistente.remove();
+            }
+            
             const container = document.querySelector('.container');
             const alertHTML = `
                 <div class="alert alert-success">
-                    ✅ <strong>Informações enviadas com sucesso!</strong><br>
-                    O arquivo CSV foi baixado automaticamente. Envie este arquivo por email ou compartilhe conforme necessário.
+                    ✅ <strong>Estrutura Organizacional gerada com sucesso!</strong><br>
+                    O arquivo CSV foi baixado automaticamente com ${dados.contatos.length} contato(s).<br>
+                    Envie este arquivo por email ou compartilhe conforme necessário.
                 </div>
             `;
             container.insertAdjacentHTML('afterbegin', alertHTML);
